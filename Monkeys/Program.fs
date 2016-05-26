@@ -34,7 +34,7 @@ let print xs =
     |> printfn "%d обезьян %s - %s" (List.length xs) s1 
 
 let rec loop() = 
-    printf "введите количество обезьян или 'q'>"
+    printf "введите количество обезьян или 'q' >"
     let s = Console.ReadLine().Trim()
     if s = "q" then () else 
     let b,n = Int32.TryParse( s )
@@ -54,12 +54,5 @@ do
     print [ (0,1); (1,-1) ]
     print [ (0,1); (1,1); (2,-2) ]
     print [ (2,-10); (3,-10); (0,5); (5,-5); (10,1) ]
-    while true do
-        printf "введите количество обезьян >"
-        let n = Int32.Parse( Console.ReadLine().Trim() )
-        readThrows [] 0 n 
-        |> List.rev        
-        |> print 
-
-    Console.ReadKey() |> ignore
+    loop()
 
