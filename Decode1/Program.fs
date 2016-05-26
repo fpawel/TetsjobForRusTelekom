@@ -1,23 +1,30 @@
 ﻿open System
 
 type Result = 
-    | Ok of char list 
-    | Err of string
+    | Ok 
+    | Err 
 
-let rec parse acc = function
-    | '.' :: rest -> parse ('0'::acc)  rest
-    | '-' :: '.' :: rest -> parse ('1'::acc)  rest
-    | '-' :: '-' :: rest -> parse ('2'::acc)  rest
-    | [] -> Ok( List.rev acc )
-    | x -> Err <| new String( List.toArray x)
+let str xs = new String( List.toArray xs)
+
+let rec parse acc = 
+    function
+        | '.' :: rest -> parse ('0'::acc)  rest
+        | '-' :: '.' :: rest -> parse ('1'::acc)  rest
+        | '-' :: '-' :: rest -> parse ('2'::acc)  rest
+        | [] -> Ok, str <| List.rev acc 
+        | x -> Err, str <| x
+    
+        
+
     
 let process' (s:string) = 
     s.ToCharArray() 
     |> Array.toList 
     |> parse []
+    
     |> function
-        | Ok xs -> printfn "%A - расшифровано : %s" s (new String( List.toArray xs) )
-        | Err er -> printfn "%A - не удалось распознать %A" s er
+        | Ok, r -> printfn "%A - расшифровано : %s" s r
+        | Err, er -> printfn "%A - не удалось распознать %s" s er
 
 [<EntryPoint>]
 do
