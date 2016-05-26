@@ -1,0 +1,193 @@
+﻿<Window x:Class="Books.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Books"
+        mc:Ignorable="d"
+        x:Name="MainWindowInst"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        
+    </Window.Resources>
+    
+    <TabControl >
+        <TabItem Header="Спарвочник книг">
+            <StackPanel>
+                <WrapPanel>
+                    <TextBox Width="300" Text="{Binding NewBook}" />
+                    <Button Command="{Binding AddNewBook}" Margin="5,0">
+                        Добавить книгу
+                    </Button>                    
+                </WrapPanel>
+
+                <DataGrid ItemsSource="{Binding Books}" AutoGenerateColumns="False" CanUserAddRows="False"
+                       x:Name="DataGridBooks">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Book.BookId, Mode=OneWay}" Header="№" />
+                        <DataGridTextColumn Binding="{Binding Book.BookName, Mode=OneWay}" Header="Наименование" />
+                        <DataGridTextColumn Binding="{Binding Raiting, Mode=OneWay}" Header="Рейтинг" />
+
+                        <DataGridTemplateColumn Header="Абонент">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <WrapPanel>
+                                        <TextBlock Text="{Binding Order.Sub.SubsName}" ></TextBlock>
+                                        <TextBlock Text="{Binding Order.OrderDate}" ></TextBlock>
+
+                                    </WrapPanel>
+
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding ElementName=MainWindowInst, Path=DataContext.Subs}" 
+                                          DisplayMemberPath="Sub.SubsName"  
+                                          SelectedValue="{Binding Sub, Mode=TwoWay}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding GetBack}">
+                                        Вернуть в библиотеку
+                                    </Button>
+
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+
+
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding Remove}">
+                                        Удалить
+                                    </Button>
+
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </StackPanel>
+            
+        </TabItem>
+        <TabItem Header="Список абонентов">
+            <StackPanel>
+                <WrapPanel>
+                    <TextBox Width="300" Text="{Binding NewSubscriberName}" />
+                    <Button Command="{Binding AddNewSubscriber}" Margin="5,0">
+                        Добавить абонента
+                    </Button>
+                    
+                </WrapPanel>
+                <DataGrid ItemsSource="{Binding Subs}" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Sub.SubsId, Mode=OneWay}" Header="№" />
+                        <DataGridTextColumn Binding="{Binding Sub.SubsName, Mode=OneWay}" Header="Наименование" />
+
+                        <DataGridTemplateColumn Header="Книги">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListBox ItemsSource="{Binding Orders}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <WrapPanel >
+                                                    <TextBlock Text="{Binding Book.BookName}"  />
+                                                    <TextBlock Text="{Binding OrderDate}"  />
+                                                </WrapPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding Remove}">
+                                        Удалить
+                                    </Button>
+
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </StackPanel>
+            
+        </TabItem>
+        <TabItem Header="Отчёт">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <WrapPanel Grid.Row="0">
+                    <TextBlock>дата, начиная с </TextBlock>
+                    <DatePicker SelectedDate="{Binding ReportDateFrom}" ></DatePicker>
+
+                    <TextBlock>дата, оканчивая</TextBlock>
+                    <DatePicker SelectedDate="{Binding ReportDateTo}" ></DatePicker>
+                    <Button Click="Button_Click">
+                        Создать отчёт
+                    </Button>
+                    <Button Click="Button_Click_1">
+                        Печать
+                    </Button>
+                </WrapPanel>
+
+                <FlowDocumentReader TextElement.FontSize="8" MaxZoom="300" Zoom="120" MinZoom="50" x:Name="docpanel" Grid.Row="1" 
+                            ToolBarTray.IsLocked="True" FontFamily="Microsoft Sans Serif" >
+                    <FlowDocument x:Name="document" x:FieldModifier="public" PageWidth="21cm" PageHeight="29.7cm" ColumnWidth="21cm" 
+                          IsColumnWidthFlexible="False" 
+                          ColumnRuleWidth="0" ColumnGap="0"
+                          FontFamily="Microsoft Sans Serif"
+                          PagePadding="1.5cm,1cm,1cm,1cm">
+                        <Section >
+                            <Table>
+                                <TableRowGroup>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Paragraph>
+                                                <Bold>
+                                                    Название книги
+                                                </Bold>
+                                            </Paragraph>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Paragraph>
+                                                <Bold>
+                                                    Рейтинг
+                                                </Bold>
+                                            </Paragraph>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableRowGroup>
+                                <TableRowGroup x:Name="DocReportRowGroup">
+                                    
+                                </TableRowGroup>
+                            </Table>                            
+                        </Section>
+                    </FlowDocument>
+                </FlowDocumentReader>
+
+            </Grid>
+            
+        </TabItem>
+       
+    </TabControl>
+</Window>
