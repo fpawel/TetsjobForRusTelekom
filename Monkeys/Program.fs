@@ -26,6 +26,8 @@ let calc xs =
         |> (=) (Some true)  )
 
 
+
+
 [<EntryPoint>]
 do
     
