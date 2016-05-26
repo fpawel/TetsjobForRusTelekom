@@ -9,7 +9,7 @@ let rec parse acc = function
     | '-' :: '.' :: rest -> parse ('1'::acc)  rest
     | '-' :: '-' :: rest -> parse ('2'::acc)  rest
     | [] -> Ok( List.rev acc )
-    | x -> Err <| string(x)
+    | x -> Err <| new String( List.toArray x)
     
 let process' (s:string) = 
     s.ToCharArray() 
