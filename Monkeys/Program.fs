@@ -19,22 +19,24 @@ let rec readThrows acc n mn=
         readThrows acc n mn
         
         
+let calc xs =     
+    xs |> List.exists(fun (x,d) -> 
+        xs |> List.tryFind(fun (x',_) -> x'= x + d )
+        |> Option.map(fun (x',d') -> x' + d' = x)
+        |> (=) (Some true)  )
+
 
 [<EntryPoint>]
 do
-    printf "введите количество обезьян >"
-    let n = Int32.Parse( Console.ReadLine().Trim() )
-    let xs = 
+    
+    while true do
+        printf "введите количество обезьян >"
+        let n = Int32.Parse( Console.ReadLine().Trim() )
         readThrows [] 0 n 
-        |> List.rev
-        |> List.mapi(fun i (x,d) -> i,x,d)
-    xs 
-    |> List.exists(fun (i,x,d) -> 
-        let n = x + d
-        if n >= xs.Length then false else
-        let _,x1,d1 = xs.[n]
-        x1 + d1 = i )
-    |> printfn "%A"
+        |> List.rev        
+        |> calc
+        |> function true -> "YES" | _ -> "NO"
+        |> printfn "ответ - %s"
 
     Console.ReadKey() |> ignore
 
