@@ -16,3 +16,7 @@
 Задание № 2 - проект Decode1
 
 ![alt tag](https://github.com/fpawel/TetsjobForRusTelekom/blob/master/Snapshots/parse.png)
+
+Задание № 3 - проект Monkies
+
+![alt tag](https://github.com/fpawel/TetsjobForRusTelekom/blob/master/Snapshots/4.png)
